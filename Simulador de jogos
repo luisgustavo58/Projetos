@@ -1,5 +1,5 @@
-#include  <stdio.h>
-#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #define QT 6
 
   void introducao();
@@ -18,75 +18,94 @@
     }
 
 
-    struct times
+    struct dados
     {
     
-      char time[QT][20];
-      int pont[QT] , j[QT], v[QT], d[QT], e[QT]; 
-      int gp[QT], gc[QT], sg[QT];
-    };
-    
-    struct times dados;
+      char nome[20];
+      int pont, jg, v, d, e; 
+      int gp, gc, sg;
+    } time[QT]; 
+
 
     void introducao(){
 
       printf("Simulcao de um campeonato de futebol. Digite %d times que você deseja que participem da competição:\n", QT);
 
-    for(int i = 0 ; i < QT ; i++)
-      fgets(dados.time[i], 20 , stdin);
+    for(int i = 0 ; i < QT ; i++){
+      fgets(time[i].nome, 20 , stdin);
+    
+    size_t tam = strlen(time[i].nome) - 1;
+      
+    if (time[i].nome[tam] == '\n')
+      time[i].nome[tam] = '\0';
+      }
     }
 
 
     void rodadas(){ 
 
-      printf("Partidas: ");      
+      printf("Partidas:\n");      
 
       int g1, g2;
 
       for(int j = 0 ; j < QT ; j++){
         for(int i = 0 ; i < QT ; i++){
           if(i != j){
-            printf("\n%s x \n%s\n", dados.time[j], dados.time[i]);
-            printf("%s:", dados.time[j]);
+
+            printf("\n%s x %s\n\n", time[j].nome, time[i].nome);
+            printf("%s:", time[j].nome);
             scanf("%d", &g1);
-            printf("%s:", dados.time[i]);
+            printf("%s:", time[i].nome);
             scanf("%d", &g2);
 
-            dados.sg[j] = dados.sg[j] + g1 - g2;
-            dados.sg[i] = dados.sg[i] + g2 - g1;
+            time[j].gp = time[j].gp + g1;
+            time[i].gp = time[i].gp + g2;
 
-            dados.gp[j] = dados.gp[j] + g1;
-            dados.gp[i] = dados.gp[i] + g2;
+            time[j].gc = time[j].gc + g2;
+            time[i].gc = time[i].gc + g1;
 
-            dados.gc[j] = dados.gc[j] + g2;
-            dados.gc[i] = dados.gc[i] + g1;
-
-            dados.j[j]++;
-            dados.j[i]++;            
+            time[j].sg = time[j].gp - time[j].gc;
+            time[i].sg = time[i].gp - time[i].gc;
+            
+            time[j].jg++;
+            time[j].jg++;            
 
           if( g1 > g2){
-            dados.pont[j] = dados.pont[j] + 3;
-            dados.v[j]++;
-            dados.d[i]++;
+            time[j].pont = time[j].pont + 3;
+            time[j].v++;
+            time[i].d++;
           }
           else if ( g1 < g2){
-            dados.pont[i] = dados.pont[i] + 3;
-            dados.v[i]++;
-            dados.d[j]++;
+            time[i].pont = time[i].pont + 3;
+            time[i].v++;
+            time[j].d++;
           }
           else if ( g1 == g2){
-            dados.pont[j] = dados.pont[j] + 1;
-            dados.pont[i] = dados.pont[i] + 1;
-            dados.e[j] = dados.e[j]++;
-            dados.e[i] = dados.e[i]++;
+            time[j].pont++;
+            time[i].pont++;
+            time[j].e++;
+            time[j].e++;
             }
           }
         }
       }
-    }  
+    } 
 
 
     void tabela(){
+
+
+
+      printf("Time|");
+      printf("\tJG");
+      printf("\tPT");
+      printf("\tV");
+      printf("\tE");
+      printf("\tD");
+      printf("\tGP");
+      printf("\tGC");
+      printf("\tSG");
+      printf("\tPV");
 
       int variavel;
       float pv[QT];
@@ -94,18 +113,19 @@
       
       for(int i = 0 ; i < QT ; i++){
       
-        variavel = 100*dados.v[i];
+        variavel = 100*time[i].v;
         pv[i] = variavel/qj;
 
-        printf("\n\nTime: %s", dados.time[i]);
-        printf("\nJogos: %d", dados.j[i]);
-        printf("\nPontos: %d", dados.pont[i]);
-        printf("\nVitorias: %d", dados.v[i]);
-        printf("\nEmpates: %d", dados.e[i]);
-        printf("\nDerrotas: %d", dados.d[i]);
-        printf("\nGols pro: %d", dados.gp[i]);
-        printf("\nGols contra: %d", dados.gc[i]);
-        printf("\nSaldo de gols: %d", dados.sg[i]);       
-        printf("\nPorcentagem de vitorias: %.f", pv[i]);
+
+        printf("\n\n%s  ", time[i].nome);
+        printf("\t%d", time[i].jg);
+        printf("\t%d", time[i].pont);
+        printf("\t%d", time[i].v);
+        printf("\t%d", time[i].e);
+        printf("\t%d", time[i].d);
+        printf("\t%d", time[i].gp);
+        printf("\t%d", time[i].gc);
+        printf("\t%d", time[i].sg);
+        printf("\t%.f%%", pv[i]);
       }
     }
