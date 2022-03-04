@@ -1,0 +1,180 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define QT 5
+
+  void introducao();
+  void rodadas();
+  void tabela();
+  void ordenacao();
+  int ordenacao_pont();
+  int ordenacao_sg();
+  int ordenacao_v();  
+  int ordenacao_gp();
+
+
+    struct dados
+    {   
+      char nome[20];
+      int pont, jg, v, d, e; 
+      int gp, gc, sg;
+    } time[QT]; 
+
+
+    int main(){
+
+    introducao();
+
+    rodadas();
+
+    ordenacao();
+
+    tabela();
+    }
+
+
+    void introducao(){      
+
+      printf("Digite %d times que você deseja que participem da competicao:\n", QT);
+
+    for(int i = 0 ; i < QT ; i++){
+      fgets(time[i].nome, 20 , stdin);
+    
+    size_t tam = strlen(time[i].nome) - 1;
+      
+    if (time[i].nome[tam] == '\n')
+      time[i].nome[tam] = '\0';
+      }
+    }
+
+
+    void rodadas(){ 
+
+      printf("Partidas:\n");      
+
+      int g1, g2;
+
+      for(int j = 0 ; j < QT ; j++){
+        for(int i = 0 ; i < QT ; i++){
+          if(i != j){
+
+            printf("\n%s x %s\n\n", time[j].nome, time[i].nome);
+            printf("%s:", time[j].nome);
+            scanf("%d", &g1);
+            printf("%s:", time[i].nome);
+            scanf("%d", &g2);
+
+            time[j].gp = time[j].gp + g1;
+            time[i].gp = time[i].gp + g2;
+
+            time[j].gc = time[j].gc + g2;
+            time[i].gc = time[i].gc + g1;
+
+            time[j].sg = time[j].gp - time[j].gc;
+            time[i].sg = time[i].gp - time[i].gc;
+            
+            time[j].jg++;
+            time[j].jg++;            
+
+          if( g1 > g2){
+            time[j].pont = time[j].pont + 3;
+            time[j].v++;
+            time[i].d++;
+          }
+          else if ( g1 < g2){
+            time[i].pont = time[i].pont + 3;
+            time[i].v++;
+            time[j].d++;
+          }
+          else if ( g1 == g2){
+            time[j].pont++;
+            time[i].pont++;
+            time[j].e++;
+            time[j].e++;
+            }
+          }
+        }
+      }
+    } 
+
+
+    void tabela(){
+     
+      printf("\n\tTime");
+      printf("\tJG");
+      printf("\tPT");
+      printf("\tV");
+      printf("\tE");
+      printf("\tD");
+      printf("\tGP");
+      printf("\tGC");
+      printf("\tSG");
+      printf("\tPV");
+
+      int variavel;
+      float pv[QT];
+      int qj = (QT - 1) * 2;
+      
+      for(int i = 0 ; i < QT ; i++){
+      
+        variavel = 100*time[i].v;
+        pv[i] = variavel/qj;
+
+        printf("\n\n%d", i+1);
+        printf("\t%s", time[i].nome);
+        printf("\t%d", time[i].jg);
+        printf("\t%d", time[i].pont);
+        printf("\t%d", time[i].v);
+        printf("\t%d", time[i].e);
+        printf("\t%d", time[i].d);
+        printf("\t%d", time[i].gp);
+        printf("\t%d", time[i].gc);
+        printf("\t%d", time[i].sg);
+        printf("\t%.f%%", pv[i]);
+      }
+    }
+
+
+    void ordenacao(){
+
+      qsort(time, QT , sizeof time[QT],ordenacao_gp);
+
+      qsort(time, QT , sizeof time[QT],ordenacao_sg);
+
+      qsort(time, QT , sizeof time[QT],ordenacao_v); 
+
+      qsort(time, QT , sizeof time[QT],ordenacao_pont);            
+       
+    }
+
+
+    int ordenacao_pont(const void* t1 , const void* t2){
+
+     int ant = ((struct dados*)t1)->pont;
+     int dep = ((struct dados*)t2)->pont;
+     return (dep - ant);
+    }
+
+
+    int ordenacao_v(const void* t1, const void* t2){
+
+      int ant = ((struct dados*)t1)->v;
+      int dep = ((struct dados*)t2)->v;
+      return (dep - ant);
+    }
+
+
+    int ordenacao_sg(const void* t1, const void* t2){
+
+      int ant = ((struct dados*)t1)->sg;
+      int dep = ((struct dados*)t2)->sg;
+      return (dep - ant);
+    }
+    
+
+    int ordenacao_gp(const void* t1, const void* t2){
+
+      int ant = ((struct dados*)t1)->gp;
+      int dep = ((struct dados*)t2)->gp;
+      return (dep - ant); 
+    }
