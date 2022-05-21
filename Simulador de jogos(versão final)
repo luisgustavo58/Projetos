@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define QT 5
+#define QT 4
 
   void introducao();
   void rodadas();
@@ -23,19 +23,21 @@
 
     int main(){
 
-    introducao();
+      introducao();
 
-    rodadas();
+      rodadas();
 
-    ordenacao();
+      ordenacao();
 
-    tabela();
+      tabela();
+
+     return 0;
     }
 
 
-    void introducao(){      
+    void introducao(){
 
-      printf("Digite %d times que você deseja que participem da competicao:\n", QT);
+      printf("Simulcao de um campeonato de futebol. Digite %d times que você deseja que participem da competição:\n", QT);
 
     for(int i = 0 ; i < QT ; i++){
       fgets(time[i].nome, 20 , stdin);
@@ -43,54 +45,54 @@
     size_t tam = strlen(time[i].nome) - 1;
       
     if (time[i].nome[tam] == '\n')
-      time[i].nome[tam] = '\0';
+      time[i].nome[tam] = '\0';      
       }
     }
 
 
     void rodadas(){ 
 
-      printf("Partidas:\n");      
+      printf("\nPartidas:\n");      
 
-      int g1, g2;
+      int ga, gb;
 
-      for(int j = 0 ; j < QT ; j++){
-        for(int i = 0 ; i < QT ; i++){
-          if(i != j){
+      for(int a = 0 ; a < QT ; a++){
+        for(int b = 0 ; b < QT ; b++){
+          if(a != b){
 
-            printf("\n%s x %s\n\n", time[j].nome, time[i].nome);
-            printf("%s:", time[j].nome);
-            scanf("%d", &g1);
-            printf("%s:", time[i].nome);
-            scanf("%d", &g2);
+            printf("\n%s x %s\n\n", time[a].nome, time[b].nome);
+            printf("%s:", time[a].nome);
+            scanf("%d", &ga);
+            printf("%s:", time[b].nome);
+            scanf("%d", &gb);
 
-            time[j].gp = time[j].gp + g1;
-            time[i].gp = time[i].gp + g2;
+            time[a].gp = time[a].gp + ga;
+            time[b].gp = time[b].gp + gb;
 
-            time[j].gc = time[j].gc + g2;
-            time[i].gc = time[i].gc + g1;
+            time[a].gc = time[a].gc + gb;
+            time[b].gc = time[b].gc + ga;
 
-            time[j].sg = time[j].gp - time[j].gc;
-            time[i].sg = time[i].gp - time[i].gc;
+            time[a].sg = time[a].gp - time[a].gc;
+            time[b].sg = time[b].gp - time[b].gc;
             
-            time[j].jg++;
-            time[j].jg++;            
+            time[a].jg++;
+            time[a].jg++;            
 
-          if( g1 > g2){
-            time[j].pont = time[j].pont + 3;
-            time[j].v++;
-            time[i].d++;
+          if( ga > gb){
+            time[a].pont = time[a].pont + 3;
+            time[a].v++;
+            time[b].d++;
           }
-          else if ( g1 < g2){
-            time[i].pont = time[i].pont + 3;
-            time[i].v++;
-            time[j].d++;
+          else if ( ga < gb){
+            time[b].pont = time[b].pont + 3;
+            time[b].v++;
+            time[a].d++;
           }
-          else if ( g1 == g2){
-            time[j].pont++;
-            time[i].pont++;
-            time[j].e++;
-            time[j].e++;
+          else if ( ga == gb){
+            time[a].pont++;
+            time[b].pont++;
+            time[a].e++;
+            time[b].e++;
             }
           }
         }
@@ -99,7 +101,8 @@
 
 
     void tabela(){
-     
+
+      printf("\n\n\t\t\t\t\t\tTABELA\n");
       printf("\n\tTime");
       printf("\tJG");
       printf("\tPT");
@@ -117,12 +120,12 @@
       
       for(int i = 0 ; i < QT ; i++){
       
-        variavel = 100*time[i].v;
-        pv[i] = variavel/qj;
+        variavel = 100 * time[i].v;
+        pv[i] = variavel / qj;
 
-        printf("\n\n%d", i+1);
+        printf("\n\n%dº", i + 1);
         printf("\t%s", time[i].nome);
-        printf("\t%d", time[i].jg);
+        printf("\t\t%d", time[i].jg);
         printf("\t%d", time[i].pont);
         printf("\t%d", time[i].v);
         printf("\t%d", time[i].e);
@@ -143,9 +146,7 @@
 
       qsort(time, QT , sizeof time[QT],ordenacao_v); 
 
-      qsort(time, QT , sizeof time[QT],ordenacao_pont);            
-       
-    }
+      qsort(time, QT , sizeof time[QT],ordenacao_pont);     }
 
 
     int ordenacao_pont(const void* t1 , const void* t2){
